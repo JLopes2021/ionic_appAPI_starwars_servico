@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -5,6 +6,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { retry, catchError }  from 'rxjs/operators';
 import { ToastController } from '@ionic/angular';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-home',
@@ -15,13 +17,11 @@ export class HomePage implements OnInit {
 
   films: Observable<any>;
 
- 
-  constructor(private router: Router, private http: HttpClient,public toastController: ToastController) { }
- 
+  constructor(private router: Router, private api: ApiService,
+    public toastController: ToastController) { }
+
   ngOnInit() {
-    this.films = this.http.get('https://swapi.dev/api/films').pipe(
-      catchError(erro => this.exibirErro(erro))
-    );
+    this.films = this.api.getFilms();
   }
 
   async exibirErro(erro) {
